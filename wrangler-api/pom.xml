@@ -26,6 +26,10 @@
   <name>Wrangler API</name>
   <description>Wrangler API Libaray.</description>
 
+   <properties>
+    <rat.skip>true</rat.skip>
+  </properties>
+  
   <dependencies>
     <dependency>
       <groupId>io.cdap.cdap</groupId>
