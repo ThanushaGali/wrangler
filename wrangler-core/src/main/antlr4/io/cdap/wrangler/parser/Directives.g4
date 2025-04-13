@@ -246,7 +246,8 @@ Pipe     : '|';
 BackSlash: '\\';
 Dollar   : '$';
 Tilde    : '~';
-
+BYTE_SIZE:Digit+ BYTE_UNIT;
+TIME_DURATION : Digit+ ('.' Digit+)? TIME_UNIT ;
 
 Bool
  : 'true'
@@ -311,3 +312,8 @@ fragment Int
 fragment Digit
  : [0-9]
  ;
+fragment BYTE_UNIT
+  : 'KB' | 'MB' | 'GB' ;
+fragment TIME_UNIT 
+  : 'ms' | 's' | 'm' ;
+
