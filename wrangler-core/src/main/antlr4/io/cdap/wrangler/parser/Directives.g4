@@ -1,3 +1,19 @@
+/*
+ * Copyright © 2017-2019 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 grammar Directives;
 
 options {
@@ -7,7 +23,18 @@ options {
 @lexer::header {
 /*
  * Copyright © 2017-2019 Cask Data, Inc.
- * Licensed under the Apache License, Version 2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 }
 
@@ -24,8 +51,7 @@ statements
 
 directive
  : command
-  (
-    codeblock
+  (   codeblock
     | identifier
     | macro
     | text
@@ -38,10 +64,8 @@ directive
     | stringList
     | numberRanges
     | properties
-    | byteSize        // ✅ NEW
-    | duration        // ✅ NEW
   )*?
- ;
+  ;
 
 ifStatement
   : ifStat elseIfStat* elseStat? '}'
@@ -116,7 +140,7 @@ numberRange
  ;
 
 value
- : String | Number | Column | Bool
+ : String | Number | Column | Bool  | BYTE_SIZE  | TIME_DURATION
  ;
 
 ecommand
@@ -141,14 +165,6 @@ number
 
 bool
  : Bool
- ;
-
-byteSize             // ✅ NEW rule
- : ByteSize
- ;
-
-duration             // ✅ NEW rule
- : Duration
  ;
 
 condition
@@ -179,6 +195,7 @@ identifierList
  : Identifier (',' Identifier)*
  ;
 
+
 /*
  * Following are the Lexer Rules used for tokenizing the recipe.
  */
@@ -198,14 +215,14 @@ StartsWith : '=^';
 NotStartsWith : '!^';
 EndsWith : '=$';
 NotEndsWith : '!$';
-PlusEqual : '+='; 
-SubEqual : '-='; 
-MulEqual : '*='; 
-DivEqual : '/='; 
-PerEqual : '%='; 
-AndEqual : '&='; 
-OrEqual  : '|='; 
-XOREqual : '^='; 
+PlusEqual : '+=';
+SubEqual : '-=';
+MulEqual : '*=';
+DivEqual : '/=';
+PerEqual : '%=';
+AndEqual : '&=';
+OrEqual  : '|=';
+XOREqual : '^=';
 Pow      : '^';
 External : '!';
 GT       : '>';
@@ -229,6 +246,8 @@ Pipe     : '|';
 BackSlash: '\\';
 Dollar   : '$';
 Tilde    : '~';
+BYTE_SIZE:Digit+ BYTE_UNIT;
+TIME_DURATION : Digit+ ('.' DIGIT+)? TIME_UNIT ;
 
 Bool
  : 'true'
@@ -237,14 +256,6 @@ Bool
 
 Number
  : Int ('.' Digit*)?
- ;
-
-ByteSize             // ✅ Lexer rule for ByteSize
- : Int (('B' | 'KB' | 'MB' | 'GB' | 'TB'))
- ;
-
-Duration             // ✅ Lexer rule for Duration
- : Int (('ms' | 's' | 'm' | 'h' | 'd'))
  ;
 
 Identifier
@@ -260,7 +271,7 @@ Column
  ;
 
 String
- : '\'' ( EscapeSequence | ~('\''))* '\''
+ : '\'' ( EscapeSequence | ~('\'') )* '\''
  | '"'  ( EscapeSequence | ~('"') )* '"'
  ;
 
@@ -301,3 +312,8 @@ fragment Int
 fragment Digit
  : [0-9]
  ;
+fragment BYTE_UNIT
+  : 'KB' | 'MB' | 'GB' ;
+fragment TIME_UNIT 
+  : 'ms' | 's' | 'm' ;
+

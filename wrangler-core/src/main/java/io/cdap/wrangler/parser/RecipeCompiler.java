@@ -84,4 +84,15 @@ public final class RecipeCompiler implements Compiler {
       throw new CompileException("Issue in compiling directives");
     }
   }
+  @Override
+  public Token visitByteSizeArg(DirectivesParser.ByteSizeArgContext ctx) {
+      // ctx.getText() retrieves the token string for BYTE_SIZE
+      return new ByteSize(ctx.getText());
+  }
+
+  @Override
+  public Token visitTimeDurationArg(DirectivesParser.TimeDurationArgContext ctx) {
+      // ctx.getText() retrieves the token string for TIME_DURATION
+      return new TimeDuration(ctx.getText());
+  }
 }

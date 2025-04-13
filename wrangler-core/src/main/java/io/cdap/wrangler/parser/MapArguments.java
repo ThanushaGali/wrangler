@@ -96,7 +96,23 @@ public class MapArguments implements Arguments {
               tokens.put(specification.name(), new TextList(values));
               pos = pos + 1;
               break;
-            } else {
+              
+            }
+            else if (specification.type() == TokenType.BYTE_SIZE ) {
+                List<String> values = new ArrayList<>();
+                values.add(((Text) token).value());
+                tokens.put(specification.name(), new TextList(values));
+                pos = pos + 1;
+                break;
+            }
+            else if (specification.type() == TokenType.TIME_DURATION ) {
+                List<String> values = new ArrayList<>();
+                values.add(((Text) token).value());
+                tokens.put(specification.name(), new TextList(values));
+                pos = pos + 1;
+                break;
+            }
+            else {
               throw new DirectiveParseException(
                 String.format("Expected argument '%s' to be of type '%s', but it is of type '%s' - %s",
                               specification.name(), specification.type().name(),
